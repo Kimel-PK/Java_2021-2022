@@ -63,28 +63,7 @@ public class Decode extends DecoderInterface {
 		
 		Decode referencja = new Decode();
 		
-		referencja.input(1);
-		referencja.input(1);
 		referencja.input(0);
-		referencja.input(1);
-		referencja.input(1);
-		referencja.input(1);
-		referencja.input(1);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(0);
-		referencja.input(1);
-		referencja.input(1);
-		referencja.input(0);
-		referencja.input(1);
-		referencja.input(1);
-		referencja.input(1);
-		referencja.input(1);
 		referencja.input(1);
 		referencja.input(1);
 		referencja.input(0);
