@@ -2,9 +2,6 @@
 /**
  * Abstrakcyjna klasa definiująca interfejs pozwalający na dekodowanie protokołu
  * szeregowego opisanego w zadaniu 01.
- * 
- * @author oramus
- *
  */
 public abstract class DecoderInterface {
 	/**
