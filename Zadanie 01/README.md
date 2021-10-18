@@ -1,6 +1,8 @@
 # Zadanie 01 termin I.
 Do zdobycia maksymalnie: 3pkt.
 
+## Idea
+
 Proszę napisać kod klasy `Decode` rozszerzającej klasę abstrakcyjną `DecoderInterface`. Zadaniem klasy `Decode` jest dekodowanie danych, które będą do niej przekazywane poprzez pewien 
 szeregowy protokół komunikacyjny (podobny protokół jest używany w komunikacji za pomocą podczerwieni pomiędzy pilotem a np. telewizorem). Do zaimplementowania przez Państwa są 
 tylko trzy metody. Oczywiście, można dla własnej wygody dodać do kodu dodatkowe metody np. prywatne, ale ja z nich korzystać nie będę, bo Państwa klasa zostanie użyta wyłącznie 
