@@ -1,4 +1,4 @@
-# Zadanie 01 termin I.
+# Zadanie 01
 Do zdobycia maksymalnie: 3pkt.
 
 ## Idea
