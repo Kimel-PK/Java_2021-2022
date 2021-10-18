@@ -23,6 +23,8 @@ Skąd będzie wiadomo ile jedynek ma X? Bo każdy strumień danych zaczynać si�
 
 UWAGA: zwacam uwagę na to, że same, kolejne powtórzenia 0 lub 1 - nic nie kodują. Istotny jest moment zakończenia jedynek i pojawienie się na wejściu zera.
 
+## Przykład
+
 Dane wejściowe przekazywane są za pomocą liczb całkowitych. Wyjście to ciąg znaków. Sposób generowania ciągu (zwykła konkatenacja ciągów czy zastosowanie klas typu StringBuilder) 
 nie ma znaczenia. Ważne jest tylko to, aby wynik był poprawny.
 
