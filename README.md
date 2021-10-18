@@ -5,6 +5,7 @@
 ## [Zadanie 1 - Dekoder](Zadanie%2001/)
 
 - I termin 17.10.2021
+- II termin 21.10.2021
 
 ---
 
