@@ -1,4 +1,5 @@
-Zadanie 02 termin I. Do zdobycia maksymalnie: 3pkt.
+# Zadanie 02
+Do zdobycia maksymalnie: 3pkt.
 
 ## Idea
 
