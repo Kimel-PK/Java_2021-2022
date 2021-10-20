@@ -3,11 +3,10 @@ import java.util.List;
 
 public class Loops implements GeneralLoops {
 	
-	private List<Integer> dolneLimity = null;
+	private List<Integer> dolneLimity;
 	private List<Integer> temp;
 	private List<Integer> gorneLimity;
-	
-	int masaKrytyczna;
+	private List<List<Integer>> wynik;
 	
 	public void setLowerLimits(List<Integer> limits) {
 		dolneLimity = limits;
@@ -26,80 +25,25 @@ public class Loops implements GeneralLoops {
 			}
 		}
 		
+		wynik = new ArrayList<List<Integer>> ();
 		temp = new ArrayList<Integer> (dolneLimity);
 		
-		int licznik = 0;
+		int licznik = temp.size() - 1;
+		wynik.add(new ArrayList<Integer>(temp));
 		
-		System.out.println("dolne: ");
-		for (Integer liczba : dolneLimity) {
-			System.out.print(liczba);
-		}
-		System.out.println(" ");
-		
-		System.out.println("gorne: ");
-		for (Integer liczba : gorneLimity) {
-			System.out.print(liczba);
-		}
-		System.out.println(" ");
-		System.out.println("===============");
-		System.out.println(" ");
-		
-		// dopoki nie nastapi "przepelnienie"
-		do {
+		while (licznik >= 0) {
 			
-			WypiszListe(temp);
-			
-			licznik = 0;
-			
-			// dodajmy 1 do calosci
-			
-			if (temp.get(licznik) + 1 > gorneLimity.get(licznik)) { // przepelnienie w danym polu
-				
-				temp.set(licznik, dolneLimity.get(licznik)); // ustaw z powrotem wartosc poczatkowa
-				temp.set (licznik + 1, temp.get(licznik + 1) + 1);
-				licznik++;
-				
-				// dodawaj kolejne liczby az trafisz na "wolne" miejsce
-				while (licznik < temp.size()) {
-					
-					masaKrytyczna++;
-					if (masaKrytyczna > 100) {
-						break;
-					}
-					
-					if (temp.get(licznik) > gorneLimity.get(licznik)) { // przepelnienie jeszcze raz
-						temp.set (licznik, dolneLimity.get(licznik));
-						temp.set (licznik + 1, temp.get(licznik + 1) + 1);
-						licznik++;
-						continue;
-					}
-					
-					break;
-					
-				}
-				
-			} else { // w danym polu nie ma przepelnienia
+			if (temp.get(licznik) == gorneLimity.get(licznik)) {
+				temp.set(licznik, dolneLimity.get(licznik));
+				licznik--;
+			} else {
 				temp.set(licznik, temp.get(licznik) + 1);
+				licznik = temp.size() - 1;
+				wynik.add(new ArrayList<Integer>(temp));
 			}
-			
-			masaKrytyczna++;
-			if (masaKrytyczna > 100) {
-				break;
-			}
-			
-			// System.out.println(licznik + " < " + temp.size());
-		} while (licznik < temp.size());
-		
-		return null;
-		
-	}
-	
-	private void WypiszListe (List<Integer> lista) {
-		
-		for (Integer liczba : lista) {
-			System.out.print(liczba);
 		}
-		System.out.print("\n");
+		
+		return wynik;
 		
 	}
 	

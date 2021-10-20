@@ -26,7 +26,7 @@ public class Tester {
             for (Integer liczba : zestaw) {
 				System.out.print(liczba + ",");
 			}
-			System.out.print("},");
+			System.out.print("},\n");
         }
         
     }
