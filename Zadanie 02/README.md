@@ -1,4 +1,5 @@
 # Zadanie 02
+
 Do zdobycia maksymalnie: 3pkt.
 
 ## Idea
@@ -31,6 +32,6 @@ Zakładamy, że limit górny będzie nie mniejszy od dolnego.
 
 Zakładamy, że jeśli określone zostaną limity dolny i górny to rozmiar przekazanych list będzie identyczny.
 
-## Dostarczenie rozwiązania.
+## Dostarczenie rozwiązania
 
-Proszę o dostarczenie kodu klasy o nazwie `Loops` implementującej interfejs `GeneralLoops`. 
+Proszę o dostarczenie kodu klasy o nazwie `Loops` implementującej interfejs `GeneralLoops`.

@@ -10,24 +10,18 @@ public class Tester {
         List<Integer> dolneLimity = new ArrayList<>();
         List<Integer> gorneLimity = new ArrayList<>();
         
-        dolneLimity.add(2);
-        dolneLimity.add(4);
-        dolneLimity.add(6);
+        dolneLimity.add(-2);
+        dolneLimity.add(-4);
+        dolneLimity.add(-6);
         
-        gorneLimity.add(3);
-        gorneLimity.add(5);
-        gorneLimity.add(7);
+        gorneLimity.add(6);
+        gorneLimity.add(8);
+        gorneLimity.add(10);
         
         loops.setLowerLimits(dolneLimity);
         loops.setUpperLimits(gorneLimity);
         
-        for (List<Integer> zestaw : loops.getResult()) {
-			System.out.print("{");
-            for (Integer liczba : zestaw) {
-				System.out.print(liczba + ",");
-			}
-			System.out.print("},\n");
-        }
+        System.out.println(loops.getResult());
         
     }
     
