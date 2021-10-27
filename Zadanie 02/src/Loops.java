@@ -30,10 +30,6 @@ class Loops implements GeneralLoops {
 					dolneLimity.add(0);
 				}
 			}
-		} else {
-			if (gorneLimity == null) {
-				gorneLimity = new ArrayList<>(dolneLimity);
-			}
 		}
 		
 		wynik = new ArrayList<List<Integer>> ();
