@@ -16,7 +16,7 @@ Informatyki 			Stosowanej
 
 ## Umowa
 
-Do zaszyfrowania wiadomości zastosowane zostaną wyłącznie znaki: małe litery, duże litery, liczby oraz znaki `"!,.@#$%^&*()<>?;:{[]}\|"`
+Do zaszyfrowania wiadomości zastosowane zostaną wyłącznie znaki: małe litery, duże litery, liczby oraz znaki `"!.@#$%^&*()<>?;:{[]}\|"`
 
 ## Wejście/wyjście
 
