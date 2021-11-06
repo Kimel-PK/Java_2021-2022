@@ -1,14 +1,17 @@
 import java.util.HashMap;
 import java.util.Map;
 
-class Decrypter {
+class Decrypter implements DecrypterInterface {
     
-    private Map<Character, Character> szyfr = new HashMap<>();
+    private Map<Character, Character> szyfr;
     private String zaszyfrowanaWiadomosc;
     
-    private String wzorzec = "Wydział Fizyki, Astronomii i Informatyki Stosowanej";
+    private final String wzorzec = "Wydział Fizyki, Astronomii i Informatyki Stosowanej";
     
 	public void setInputText(String encryptedDocument) {
+        
+        if (encryptedDocument == null)
+            encryptedDocument = "";
         
 		// wyczyść nadmiarowe spacje, tabulatory i znaki nowej linii
         zaszyfrowanaWiadomosc = encryptedDocument.trim().replaceAll("[\n\t]", " ").replaceAll("[ ]+", " ");
@@ -16,11 +19,11 @@ class Decrypter {
         Analyze ();
     }
     
-	public Map<Character, Character> getCode() {
+	public Map<Character, Character> getDecode() {
         return szyfr;
     }
     
-	public Map<Character, Character> getDecode() {
+	public Map<Character, Character> getCode() {
         
         Map<Character, Character> odwroconySzyfr = new HashMap<>();
         for(Map.Entry<Character, Character> entry : szyfr.entrySet()){
@@ -32,7 +35,7 @@ class Decrypter {
     
     private void Analyze () {
         
-        System.out.println(zaszyfrowanaWiadomosc);
+        szyfr = new HashMap<>();
         
         // podziel wiadomość na słowa
         String[] slowa = zaszyfrowanaWiadomosc.split(" ");
@@ -56,14 +59,12 @@ class Decrypter {
                     pozycjaWCiagu += dlugosciSlow[j] + 1;
                 }
                 
-                System.out.println("Znaleziono podejrzany ciag na pozycji: " + pozycjaWCiagu);
-                
                 // powtarzaj dla wszystkich znaków
                 for (int n = 0; n < wzorzec.length(); n++, pozycjaWCiagu++) {
                     
                     // weź znak
                     if (zaszyfrowanaWiadomosc.charAt(pozycjaWCiagu) == ' ' || zaszyfrowanaWiadomosc.charAt(pozycjaWCiagu) == ',')
-                        continue;
+                        continue; // pomiń spacje i przecinki
                     
                     // sprawdź czy dany znak można zakodować i czy zgadza się ze wzorcem
                     if (szyfr.containsKey(zaszyfrowanaWiadomosc.charAt(pozycjaWCiagu))) {
@@ -77,13 +78,11 @@ class Decrypter {
                 
                 if (szyfr.size() == 22) {
                     // jeśli udało się dotrzeć do końca wzorca bez błędów koniec programu
-                    System.out.println("Sukces");
+                    return;
                 } else {
                     // jeśli nie udało się dotrzeć do końca wzorca
-                    System.out.println("Porazka: zaszyfrowano tylko " + szyfr.size() + " znaków");
+                    szyfr = new HashMap<>();
                 }
-                
-                break;
                 
             }
         }
