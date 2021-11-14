@@ -42,10 +42,6 @@ public class Test04 {
 				new Position2D(4, 2)));
 		if (!expLines.equals(b.getLines())) {
 			System.err.println("error: getLines invalid");
-			System.out.println("Oczekiwano:");
-			System.out.println(expLines);
-			System.out.println("Otrzymano:");
-			System.out.println(b.getLines());
 			errorCount++;
 		}
 
@@ -57,10 +53,6 @@ public class Test04 {
 					new Position2D(8, 4), new Position2D(8, 2)));
 		if (!expPositions.equals(b.getIntersectionPositions())) {
 			System.err.println("error: getIntersectionPositions invalid");
-			System.out.println("Oczekiwano:");
-			System.out.println(expPositions);
-			System.out.println("Otrzymano:");
-			System.out.println(b.getIntersectionPositions());
 			errorCount++;
 		}
 
@@ -70,32 +62,28 @@ public class Test04 {
 		expInter.put("c", List.of("a", "a"));
 		if (!expInter.equals(b.getIntersectionsWithLines())) {
 			System.err.println("error: getIntersectionsWithLines invalid");
-			System.out.println("Oczekiwano:");
-			System.out.println(expInter);
-			System.out.println("Otrzymano:");
-			System.out.println(b.getIntersectionsWithLines());
 			errorCount++;
 		}
 
 		// getIntersectionOfLinesPair
-		Map<BusLine.LinesPair, Set<Position>> expPair = new HashMap<BusLine.LinesPair, Set<Position>>();
+		Map<BusLineInterface.LinesPair, Set<Position>> expPair = new HashMap<BusLineInterface.LinesPair, Set<Position>>();
 		Map<BusLineInterface.LinesPair, Set<Position>> resPair = b.getIntersectionOfLinesPair();
 		expPair.put(b.new LinesPair("a", "a"), new HashSet<Position>(List.of(new Position2D(4, 4))));
 		expPair.put(b.new LinesPair("a", "b"), new HashSet<Position>(List.of()));
-		expPair.put(b.new LinesPair("a", "c"), new HashSet<Position>(List.of(new Position2D(7, 2), new Position2D(7, 4))));
+		expPair.put(b.new LinesPair("a", "c"), new HashSet<Position>(List.of(new Position2D(8, 2), new Position2D(8, 4))));
 		expPair.put(b.new LinesPair("b", "a"), new HashSet<Position>(List.of()));
 		expPair.put(b.new LinesPair("b", "b"), new HashSet<Position>(List.of()));
 		expPair.put(b.new LinesPair("b", "c"), new HashSet<Position>(List.of()));
-		expPair.put(b.new LinesPair("c", "a"), new HashSet<Position>(List.of(new Position2D(7, 2), new Position2D(7, 4))));
+		expPair.put(b.new LinesPair("c", "a"), new HashSet<Position>(List.of(new Position2D(8, 2), new Position2D(8, 4))));
 		expPair.put(b.new LinesPair("c", "b"), new HashSet<Position>(List.of()));
 		expPair.put(b.new LinesPair("c", "c"), new HashSet<Position>(List.of()));
-
+		
 		if (expPair.size() != resPair.size()) {
 			System.err.println("error: getIntersectionOfLinesPair invalid");
 			errorCount++;
 		} else {
 			for (var expEntry : expPair.entrySet()) {
-				BusLine.LinesPair expLinesPair = expEntry.getKey();
+				BusLineInterface.LinesPair expLinesPair = expEntry.getKey();
 				var match = resPair.entrySet().stream()
 						.filter(entry -> entry.getKey().getFirstLineName().equals(expLinesPair.getFirstLineName())
 								&& entry.getKey().getSecondLineName().equals(expLinesPair.getSecondLineName()))
@@ -111,4 +99,5 @@ public class Test04 {
 		if (errorCount == 0)
 			System.out.println("all tests passed");
 	}
+	
 }

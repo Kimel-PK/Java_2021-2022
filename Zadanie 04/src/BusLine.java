@@ -33,6 +33,17 @@ class BusLine implements BusLineInterface {
 		String linia1;
 		String linia2;
 		
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			LinesPair other = (LinesPair) obj;
+			return getFirstLineName() == other.getFirstLineName() && getSecondLineName() == other.getSecondLineName();
+		}
+		
 		LinesPair (String _linia1, String _linia2) {
 			linia1 = _linia1;
 			linia2 = _linia2;
@@ -132,7 +143,7 @@ class BusLine implements BusLineInterface {
 			for (String nazwaLinii2 : linieAutobusowePT.keySet()) {
 				List<PunktTrasy> linia2 = linieAutobusowePT.get(nazwaLinii2);
 				
-				System.out.println("Trasy " + nazwaLinii1 + " - " + nazwaLinii2);
+				// System.out.println("Trasy " + nazwaLinii1 + " - " + nazwaLinii2);
 				
 				int i = 0;
 				PunktTrasy punkt1P = linia1.get(0);
@@ -149,14 +160,12 @@ class BusLine implements BusLineInterface {
 							// System.out.println("Podejrzenie o skrzyżowanie na " + punkt1.wspolrzedne);
 							// punkt podejrzany o skrzyżowanie
 							if (PunktTrasy.CzyProstopadlePlaszczyzny (punkt1P.plaszczyzna, punkt2P.plaszczyzna)) {
-								System.out.println("Prostopadłość");
+								// System.out.println("Prostopadłość");
 								// miejsce stykania się jest prostopadłe
-								System.out.println("Linia 1 " + punkt1P.plaszczyzna + " - " + punkt1N.plaszczyzna);
-								System.out.println("Linia 2 " + punkt2P.plaszczyzna + " - " + punkt2N.plaszczyzna);
 								if (punkt1P.plaszczyzna == punkt1N.plaszczyzna &&
 									punkt2P.plaszczyzna == punkt2N.plaszczyzna) {
 									
-									System.out.println("Dodanie punktu");
+									// System.out.println("Dodanie punktu");
 									
 									if (skrzyzowaniaPozycje.get(nazwaLinii1) == null) {
 										skrzyzowaniaPozycje.put(nazwaLinii1, new TreeMap<>());
@@ -243,39 +252,60 @@ class BusLine implements BusLineInterface {
 		
 		intersectionOfLinesPair = new HashMap<>();
 		
-		Map<String, List<Position>> interPositions = getIntersectionPositions();
-		Map<String, List<String>> interNames = getIntersectionsWithLines();
+		Map<String, List<Position>> interPositions;
+		if (intersectionPositions != null)
+			interPositions = intersectionPositions;
+		else
+			interPositions = getIntersectionPositions();
 		
-		Set<Position> punkty = new HashSet<>();
+		Map<String, List<String>> interNames;
+		if (intersectionOfLinesPair != null)
+			interNames = intersectionsWithLines;
+		else
+			interNames = getIntersectionsWithLines();
+		
+		for (String nazwaLinii1 : interPositions.keySet()) {
+			List<Position> linia1 = interPositions.get(nazwaLinii1);
+			
+			for (String nazwaLinii2 : interPositions.keySet()) {
+				
+				LinesPair para = new LinesPair(nazwaLinii1, nazwaLinii2);
+				intersectionOfLinesPair.put(para, new HashSet<>());
+				
+				for (int i = 0; i < linia1.size(); i++) {
+					
+					if (interNames.get(nazwaLinii1).get(i) == nazwaLinii2) {
+						intersectionOfLinesPair.get(para).add(linia1.get(i));
+					}
+					
+				}
+				
+			}
+			
+		}
 		
 		for (String nazwaLinii1 : linieAutobusowePT.keySet()) {
-			List<PunktTrasy> linia1 = linieAutobusowePT.get(nazwaLinii1);
 			
 			for (String nazwaLinii2 : linieAutobusowePT.keySet()) {
-				List<PunktTrasy> linia2 = linieAutobusowePT.get(nazwaLinii2);
+				
+				boolean znaleziono = false;
+				LinesPair para = new LinesPair(nazwaLinii1, nazwaLinii2);
+				
+				for (BusLineInterface.LinesPair para2 : intersectionOfLinesPair.keySet()) {
+					if (para.equals(para2)) {
+						znaleziono = true;
+						break;
+					}
+				}
+				
+				if (!znaleziono)
+					intersectionOfLinesPair.put(para, new HashSet<>());
 				
 			}
 			
 		}
 		
 		return intersectionOfLinesPair;
-	}
-	
-	/* ===================== */
-	/* ===================== */
-	/* ===================== */
-	
-	public void WypiszLinie (String busLineName) {
-		
-		PunktTrasy punkt = linieAutobusowePT.get(busLineName).get(0);
-		
-		do {
-			
-			System.out.println(punkt.wspolrzedne + " - " + punkt.plaszczyzna);
-			punkt = punkt.nastepny;
-			
-		} while (punkt != null);
-		
 	}
 	
 }
