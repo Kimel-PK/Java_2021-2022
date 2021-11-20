@@ -15,3 +15,7 @@
 ---
 
 ## [Zadanie 4 - Trasy](Zadanie%2004/)
+
+---
+
+## [Zadanie 5 - Wypełnianie kolorem](Zadanie%2005/)
