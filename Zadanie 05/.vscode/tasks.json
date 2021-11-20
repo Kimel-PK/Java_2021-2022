@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "Decrypter.class",
+        "label": "Graphics.class",
         "type": "shell",
 		"options": {    
 			"cwd": "${workspaceFolder}\\bin"
 		},
-        "command": "javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
+        "command": "rm *; javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
         "group": {
           "kind": "build",
           "isDefault": true

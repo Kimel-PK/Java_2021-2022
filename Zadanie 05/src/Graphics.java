@@ -1,9 +1,11 @@
-import java.util.Objects;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 class Graphics implements GraphicsInterface {
 	
 	CanvasInterface canvas;
+	List<Position> piksele;
 	
 	public void fillWithColor(Position startingPosition, Color color) throws GraphicsInterface.WrongStartingPosition, GraphicsInterface.NoCanvasException {
 		
@@ -12,21 +14,38 @@ class Graphics implements GraphicsInterface {
 			
 		try {
 			canvas.setColor(startingPosition, color);
-		} catch (CanvasBorderException | BorderColorException e) {
+		} catch (CanvasInterface.CanvasBorderException e) {
 			throw new WrongStartingPosition();
+		} catch (CanvasInterface.BorderColorException e) {
+			
 		}
 		
-		Queue<Position2D> kolejka = new Queue<>();
-		kolejka.add((Position2D)startingPosition);
+		piksele = new LinkedList<>();
 		
-		while (kolejka.size() != 0) {
+		Queue<Position> kolejka = new LinkedList<>();
+		kolejka.add(startingPosition);
+		
+		while (kolejka.size() > 0) {
 			
-			Position2D obecnaPozycja = kolejka.poll();
+			Position obecnaPozycja = kolejka.poll();
+			
+			if (piksele.contains(obecnaPozycja)) {
+				continue;
+			} else {
+				piksele.add(obecnaPozycja);
+			}
 			
 			try {
 				canvas.setColor(obecnaPozycja, color);
-			} catch (CanvasBorderException | BorderColorException e) {
-				
+			} catch (CanvasInterface.CanvasBorderException e) {
+				continue;
+			} catch (CanvasInterface.BorderColorException e) {
+				try {
+					canvas.setColor(obecnaPozycja, e.previousColor);
+					continue;
+				} catch (Exception e2) {
+					
+				}
 			}
 			
 			kolejka.add(new Position2D(obecnaPozycja.getCol() + 1, obecnaPozycja.getRow()));
@@ -60,6 +79,17 @@ class Position2D implements Position {
 
 	public int getCol() {
 		return col;
+	}
+	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Position2D other = (Position2D) obj;
+		return col == other.col && row == other.row;
 	}
 	
 }
