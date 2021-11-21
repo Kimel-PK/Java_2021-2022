@@ -17,7 +17,12 @@ class Graphics implements GraphicsInterface {
 		} catch (CanvasInterface.CanvasBorderException e) {
 			throw new WrongStartingPosition();
 		} catch (CanvasInterface.BorderColorException e) {
-			
+			try {
+				canvas.setColor(startingPosition, e.previousColor);
+			} catch (Exception e2) {
+				
+			}
+			throw new WrongStartingPosition();
 		}
 		
 		piksele = new LinkedList<>();
