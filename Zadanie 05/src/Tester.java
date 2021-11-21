@@ -2,6 +2,26 @@
 
 public class Tester {
 	
+	public static class Position2 implements Position {
+		int row;
+		int col;
+	
+		public Position2(int row, int col) {
+			this.row = row;
+			this.col = col;
+		}
+	
+		@Override
+		public int getRow() {
+			return row;
+		}
+	
+		@Override
+		public int getCol() {
+			return col;
+		}
+	}
+	
 	public static class Canvas implements CanvasInterface {
 		
 		public Color[][] array;
@@ -67,7 +87,7 @@ public class Tester {
 		
 		// test 1 - no canvas
 		try {
-			gp.fillWithColor(new Position2D(90, 90), Color.GREEN);
+			gp.fillWithColor(new Position2(90, 90), Color.GREEN);
 		} catch (GraphicsInterface.NoCanvasException ex) {
 			threwEx = true;
 		}
@@ -77,7 +97,7 @@ public class Tester {
 		threwEx = false;
 		gp.setCanvas(canvas);
 		try {
-			gp.fillWithColor(new Position2D(90, 90), Color.GREEN);
+			gp.fillWithColor(new Position2(90, 90), Color.GREEN);
 		} catch (GraphicsInterface.WrongStartingPosition ex) {
 			threwEx = true;
 		}
@@ -87,7 +107,7 @@ public class Tester {
 		threwEx = false;
 		gp.setCanvas(canvas);
 		try {
-			gp.fillWithColor(new Position2D(1, 1), Color.GREEN);
+			gp.fillWithColor(new Position2(1, 1), Color.GREEN);
 		} catch (GraphicsInterface.WrongStartingPosition ex) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < canvas.array.length; i++) {
@@ -102,7 +122,7 @@ public class Tester {
 		System.out.println("test 3 " + (threwEx ? "passed" : "failed"));
 		
 		// test 4
-		gp.fillWithColor(new Position2D(5, 5), Color.GREEN);
+		gp.fillWithColor(new Position2(5, 5), Color.GREEN);
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < canvas.array.length; i++) {
 			for (int j = 0; j < canvas.array[0].length; j++) {
@@ -115,7 +135,7 @@ public class Tester {
 		System.out.println("test 4 " + (expectedStr.equals(sb.toString()) ? "passed" : "failed"));
 		
 		// test 5
-		gp.fillWithColor(new Position2D(5, 5), Color.ORANGE);
+		gp.fillWithColor(new Position2(5, 5), Color.ORANGE);
 		sb = new StringBuilder();
 		for (int i = 0; i < canvas.array.length; i++) {
 			for (int j = 0; j < canvas.array[0].length; j++) {
@@ -142,7 +162,7 @@ public class Tester {
 		{ Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, Color.RED, },});
 		
 		gp.setCanvas(canvas);
-		gp.fillWithColor(new Position2D(1, 1), Color.GREEN);
+		gp.fillWithColor(new Position2(1, 1), Color.GREEN);
 		sb = new StringBuilder();
 		for (int i = 0; i < canvas.array.length; i++) {
 			for (int j = 0; j < canvas.array[0].length; j++) {

@@ -4,6 +4,37 @@ import java.util.Queue;
 
 class Graphics implements GraphicsInterface {
 	
+	class Position2D implements Position {
+		
+		private final int col;
+		private final int row;
+		
+		public Position2D(int col, int row) {
+			this.col = col;
+			this.row = row;
+		}
+		
+		public int getRow() {
+			return row;
+		}
+		
+		public int getCol() {
+			return col;
+		}
+		
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Position2D other = (Position2D) obj;
+			return col == other.col && row == other.row;
+		}
+		
+	}
+	
 	CanvasInterface canvas;
 	List<Position> piksele;
 	
@@ -64,37 +95,6 @@ class Graphics implements GraphicsInterface {
 	
 	public void setCanvas(CanvasInterface _canvas) {
 		canvas = _canvas;
-	}
-	
-}
-
-class Position2D implements Position {
-
-	private final int col;
-	private final int row;
-
-	public Position2D(int col, int row) {
-		this.col = col;
-		this.row = row;
-	}
-
-	public int getRow() {
-		return row;
-	}
-
-	public int getCol() {
-		return col;
-	}
-	
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Position2D other = (Position2D) obj;
-		return col == other.col && row == other.row;
 	}
 	
 }
