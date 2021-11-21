@@ -29,6 +29,8 @@ Dla uproszczenia zakładamy, że płótno będzie prostokątne.
 
 Idea zamalowywania jego fragmentu pokazana jest na rysunku poniżej.
 
+![płótno](płótno.png "Płótno")
+
 Wypełniany jest obszar, który ogranicza rozmiar płótna oraz innych kolorów. Oczywiście nadal należy pamiętać o tym, że nie do każdego piksela można dotrzeć poruszając się w podany w zadaniu sposób.
 
 ## UWAGI
