@@ -1,3 +1,13 @@
+/*
+	Wstydze sie tego kodu,
+	Dawno czegos takiego nie podrutowalem
+	
+	- How many tests did it passed?
+	- All of them
+	- What did it cost?
+	- Sanity
+	
+*/
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +19,7 @@ import java.util.TreeMap;
 
 class BusLine implements BusLineInterface {
 	
-	// mapy wyjściowe
+	// mapy wyjsciowe
 	Map<String, List<Position>> lines;
 	Map<String, List<Position>> intersectionPositions;
 	Map<String, List<String>> intersectionsWithLines;
@@ -70,21 +80,15 @@ class BusLine implements BusLineInterface {
 	// Metoda dodaje odcinek lineSegment do linii autobusowej o nazwie busLineName.
 	public void addLineSegment(String busLineName, LineSegment lineSegment) {
 		
-		// System.out.println("Dodaj segment");
-		
 		List<PunktTrasy> punkty = linieAutobusowePT.get(busLineName);
-		
 		PunktTrasy.Kierunek kierunek = PunktTrasy.OkreslKierunek(lineSegment.getFirstPosition(), lineSegment.getLastPosition());
-		// System.out.println("Określono kierunek na " + kierunek);
 		
 		PunktTrasy nastepny = null;
-		
 		Boolean koncowy = false;
 		
-		// sprawdź czy w liście istnieje już punkt końcowy
+		// sprawdz czy w liscie istnieje juz punkt koncowy
 		for (PunktTrasy punkt : punkty) {
 			if (punkt.wspolrzedne.hashCode() == lineSegment.getLastPosition().hashCode()) {
-				// System.out.println("Odnaleziono punkt koncowy zgodny z dodawanym segmentem " + punkt.wspolrzedne);
 				punkt.UstawPlaszczyzne(PunktTrasy.Kierunek.Nieokreslony);
 				nastepny = punkt;
 				koncowy = true;
@@ -103,13 +107,11 @@ class BusLine implements BusLineInterface {
 		while (temp.hashCode() != lineSegment.getFirstPosition().hashCode()) {
 			
 			if (nastepny != null) {
-				// System.out.println("Następny to " + nastepny.wspolrzedne);
 				nastepny = new PunktTrasy (temp, kierunek, nastepny);
 			} else {
 				nastepny = new PunktTrasy (temp, kierunek, null);
 			}
 			punkty.add (nastepny);
-			// System.out.println("Dodano punkt " + nastepny.wspolrzedne);
 			
 			temp = PunktTrasy.PrzesunPunkt(temp, PunktTrasy.OdwrocKierunek(kierunek));
 			
@@ -117,10 +119,9 @@ class BusLine implements BusLineInterface {
 		
 		Boolean poczatkowy = false;
 		
-		// sprawdź czy istnieje już punkt początkowy
+		// sprawdz czy istnieje juz punkt poczatkowy
 		for (PunktTrasy punkt : punkty) {
 			if (punkt.wspolrzedne.hashCode() == temp.hashCode()) {
-				// System.out.println("Odnaleziono punkt startowy zgodny z dodawanym segmentem" + punkt.wspolrzedne);
 				punkt.UstawPlaszczyzne(PunktTrasy.Kierunek.Nieokreslony);
 				punkt.nastepny = nastepny;
 				poczatkowy = true;
@@ -143,8 +144,6 @@ class BusLine implements BusLineInterface {
 			for (String nazwaLinii2 : linieAutobusowePT.keySet()) {
 				List<PunktTrasy> linia2 = linieAutobusowePT.get(nazwaLinii2);
 				
-				// System.out.println("Trasy " + nazwaLinii1 + " - " + nazwaLinii2);
-				
 				int i = 0;
 				PunktTrasy punkt1P = linia1.get(0);
 				PunktTrasy punkt1 = punkt1P.nastepny;
@@ -157,26 +156,22 @@ class BusLine implements BusLineInterface {
 					while (punkt2N != null) {
 						
 						if (punkt1.wspolrzedne.equals(punkt2.wspolrzedne)) {
-							// System.out.println("Podejrzenie o skrzyżowanie na " + punkt1.wspolrzedne);
-							// punkt podejrzany o skrzyżowanie
-							if (PunktTrasy.CzyProstopadlePlaszczyzny (punkt1P.plaszczyzna, punkt2P.plaszczyzna)) {
-								// System.out.println("Prostopadłość");
-								// miejsce stykania się jest prostopadłe
-								if (punkt1P.plaszczyzna == punkt1N.plaszczyzna &&
-									punkt2P.plaszczyzna == punkt2N.plaszczyzna) {
-									
-									// System.out.println("Dodanie punktu");
-									
-									if (skrzyzowaniaPozycje.get(nazwaLinii1) == null) {
-										skrzyzowaniaPozycje.put(nazwaLinii1, new TreeMap<>());
-									}
-									skrzyzowaniaPozycje.get(nazwaLinii1).put(i, new Position2D (punkt1.wspolrzedne.getCol(), punkt1.wspolrzedne.getRow()));
-									if (skrzyzowaniaNazwy.get(nazwaLinii1) == null) {
-										skrzyzowaniaNazwy.put(nazwaLinii1, new TreeMap<>());
-									}
-									skrzyzowaniaNazwy.get(nazwaLinii1).put(i, nazwaLinii2);
+							// punkt podejrzany o skrzyzowanie
+							if (PunktTrasy.CzyProstopadlePlaszczyzny (punkt1.plaszczyzna, punkt2.plaszczyzna) || (PunktTrasy.CzyProstopadlePlaszczyzny(punkt1P.plaszczyzna, punkt2P.plaszczyzna) && punkt1P.plaszczyzna == punkt1N.plaszczyzna && punkt2P.plaszczyzna == punkt2N.plaszczyzna)) {
+								
+								// miejsce stykania sie jest prostopadle
+								
+								if (skrzyzowaniaPozycje.get(nazwaLinii1) == null) {
+									skrzyzowaniaPozycje.put(nazwaLinii1, new TreeMap<>());
 								}
+								skrzyzowaniaPozycje.get(nazwaLinii1).put(i, new Position2D (punkt1.wspolrzedne.getCol(), punkt1.wspolrzedne.getRow()));
+								if (skrzyzowaniaNazwy.get(nazwaLinii1) == null) {
+									skrzyzowaniaNazwy.put(nazwaLinii1, new TreeMap<>());
+								}
+								skrzyzowaniaNazwy.get(nazwaLinii1).put(i, nazwaLinii2);
+								
 							}
+							
 						}
 						
 						punkt2P = punkt2P.nastepny;
@@ -193,7 +188,6 @@ class BusLine implements BusLineInterface {
 			}
 			
 			if (skrzyzowaniaPozycje.get(nazwaLinii1) != null) {
-				// System.out.println("Dodawanie linii " + nazwaLinii1);
 				lines.put(nazwaLinii1, new ArrayList<>(linia1.size()));
 				PunktTrasy punkt = linia1.get(0);
 				do {
@@ -247,7 +241,7 @@ class BusLine implements BusLineInterface {
 		return intersectionsWithLines;
 	}
 	
-	// Metoda zwraca mape, której kluczem jest para nazw linii a wartoscia zbior polozen, w ktorych para linii ma skrzyzowania.
+	// Metoda zwraca mape, ktorej kluczem jest para nazw linii a wartoscia zbior polozen, w ktorych para linii ma skrzyzowania.
 	public Map<BusLineInterface.LinesPair, Set<Position>> getIntersectionOfLinesPair() {
 		
 		intersectionOfLinesPair = new HashMap<>();
@@ -259,7 +253,7 @@ class BusLine implements BusLineInterface {
 			interPositions = getIntersectionPositions();
 		
 		Map<String, List<String>> interNames;
-		if (intersectionOfLinesPair != null)
+		if (intersectionsWithLines != null)
 			interNames = intersectionsWithLines;
 		else
 			interNames = getIntersectionsWithLines();
@@ -366,7 +360,7 @@ class PunktTrasy {
 			return new Position2D(punkt.getCol() - 1, punkt.getRow() - 1);
 		else if (kierunek == Kierunek.Lewo)
 			return new Position2D(punkt.getCol() - 1, punkt.getRow());
-		else // lewa góra
+		else // lewa gora
 			return new Position2D(punkt.getCol() - 1, punkt.getRow() + 1);
 	}
 	
