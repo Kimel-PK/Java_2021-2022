@@ -19,3 +19,7 @@
 ---
 
 ## [Zadanie 5 - Wypełnianie kolorem](Zadanie%2005/)
+
+---
+
+## [Zadanie 6 - Kompresor](Zadanie%2006/)
