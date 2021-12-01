@@ -23,3 +23,7 @@
 ---
 
 ## [Zadanie 6 - Kompresor](Zadanie%2006/)
+
+---
+
+## [Zadanie 7 - Wątki](Zadanie%2007/)
