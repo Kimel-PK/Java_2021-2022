@@ -25,6 +25,7 @@ class ParallelSearcher implements ParallelSearcherInterface {
 			
 			// wyslij wynik i odbierz nowy zestaw skrytek
 			zestawSkrytek = supplier.get(sumaWartosci);
+			sumaWartosci = 0;
 			
 		}
 	}
@@ -44,8 +45,8 @@ class ParallelSearcher implements ParallelSearcherInterface {
 			HidingPlaceSupplier.HidingPlace skrytka = zestawSkrytek.get();
 			while (skrytka != null) {
 				
-				if (skrytka.isPresent()) {
-					synchronized(blokada) {
+				synchronized(blokada) {
+					if (skrytka.isPresent()) {
 						sumaWartosci += skrytka.openAndGetValue();
 					}
 				}
@@ -59,4 +60,3 @@ class ParallelSearcher implements ParallelSearcherInterface {
 	}
 	
 }
-
