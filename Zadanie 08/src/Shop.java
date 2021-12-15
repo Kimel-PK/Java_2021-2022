@@ -43,7 +43,7 @@ class Shop implements ShopInterface {
 					System.out.println(e.getMessage());
 				}
 				
-				if (_stock.get(productName) != null && _stock.get(productName) > quantity) {
+				if (_stock.get(productName) != null && _stock.get(productName) >= quantity) {
 					_stock.put (productName, _stock.get(productName) - quantity);
 					return true;
 				}
