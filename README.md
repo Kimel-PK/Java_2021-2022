@@ -27,3 +27,11 @@
 ---
 
 ## [Zadanie 7 - Wątki](Zadanie%2007/)
+
+---
+
+## [Zadanie 8 - Zakupy](Zadanie%2008/)
+
+---
+
+## [Zadanie 9 - Rysowanie grafów](Zadanie%2009/)
