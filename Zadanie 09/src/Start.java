@@ -49,7 +49,6 @@ class Start {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				PobierzDane(jfc.getSelectedFile().getAbsolutePath());
 				// System.out.println("Odczytano plik");
-				rysunek.setBackground(Color.white);
 				rysunek.repaint();
 			}
 		}
@@ -173,6 +172,7 @@ class Plotno extends JPanel {
 	}
 	
 	public void paintComponent (Graphics g) {
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		
 		g2.setColor (Color.black);
