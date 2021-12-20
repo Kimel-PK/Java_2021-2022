@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Przetestuj program",
+        "type": "shell",
+        "options": {    
+          "cwd": "${workspaceFolder}\\bin"
+        },
+        "command": "rm *; javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Start",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      }
+    ]
+}
