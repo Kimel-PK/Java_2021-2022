@@ -1,0 +1,5 @@
+class Kasjer implements KasjerInterface {
+	
+	
+	
+}
