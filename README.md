@@ -35,3 +35,17 @@
 ---
 
 ## [Zadanie 9 - Rysowanie grafów](Zadanie%2009/)
+
+---
+
+## [Zadanie 10 - Nierozmienialna N-złotówka](Zadanie%2010/)
+
+---
+
+## [Zadanie 11 - Nieznane]
+
+---
+
+## [Zadanie 12 - Nieznane]
+
+---
