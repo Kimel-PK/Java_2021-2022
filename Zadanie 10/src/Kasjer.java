@@ -8,20 +8,11 @@ class Kasjer implements KasjerInterface {
 	List<Pieniadz> kasa = new LinkedList<>();
 	RozmieniaczInterface rozmieniacz;
 	
-	public Kasjer () {
-		System.out.println("Nowy Kasjer");
-	}
-	
 	public List<Pieniadz> rozlicz(int cena, List<Pieniadz> _pieniadze) {
 		
 		List<Pieniadz> pieniadze = new LinkedList<>(_pieniadze);
 		List<Pieniadz> zebrane = new LinkedList<>();
 		List<Pieniadz> reszta = new LinkedList<>(pieniadze);
-		
-		// trzeba zebrać najpierw wszystkie pieniądze zaczynając od nierozmienialnych które nie przekroczą ceny
-		// potem tyle rozmienialnych żeby przekroczyć cene i wydać
-		
-		// jeśli nie ma jak dobrać rozmienialnych to wtedy dopiero zajmujemy się nierozmienialnymi
 		
 		// sortuj otzymane pieniadze od najwiekszego
 		sortujPieniadzeMalejaco(pieniadze);
@@ -32,7 +23,6 @@ class Kasjer implements KasjerInterface {
 		
 		// nie trzeba bylo rozmieniac zadnych pieniedzy
 		if (policzPieniadze(zebrane) == cena) {
-			System.out.println("Nie trzeba nic rozmieniac ani wydawac");
 			kasa.addAll(zebrane);
 			return reszta;
 		}
@@ -40,10 +30,8 @@ class Kasjer implements KasjerInterface {
 		// szukaj pierwszej rozmienialnej monety pozwalajacej na rozliczenie
 		Pieniadz rozmienialnaMoneta = szukajNominaluWiekszegoLubRownego(cena - policzPieniadze(zebrane), reszta, true);
 		
-		// jeśli znaleziono odpowiednia monete to rozmien i koniec
+		// jesli znaleziono odpowiednia monete to rozmien i koniec
 		if (rozmienialnaMoneta != null) {
-			
-			System.out.println("Rozmienianie pieniedzy klienta");
 			
 			reszta.remove(rozmienialnaMoneta);
 			List<Pieniadz> rozmienionaMoneta = rozmieniacz.rozmien(rozmienialnaMoneta);
@@ -66,7 +54,6 @@ class Kasjer implements KasjerInterface {
 		}
 		
 		// uporaj sie z nierozmienialna N-zlotowka
-		System.out.println("Trzeba się zabrać za nierozmienialne");
 		
 		// szukaj najmniejszej nierozmienialnej N-zlotowki
 		
@@ -74,7 +61,7 @@ class Kasjer implements KasjerInterface {
 		
 		int resztaNierozmienialnej = nierozmienialnaMoneta.wartosc() - (cena - policzPieniadze(zebrane));
 		
-		// szukaj w kasie nierozmienialnaMoneta - cena - zebrane
+		// szukaj w kasie nierozmienialnaMoneta - (cena - zebrane)
 		List<Pieniadz> pozostaleDrobne = zbierzPieniadze(resztaNierozmienialnej, kasa, true);
 		if (policzPieniadze(pozostaleDrobne) + policzPieniadze(zebrane) == cena) {
 			
@@ -84,9 +71,7 @@ class Kasjer implements KasjerInterface {
 			return reszta;
 			
 		} else {
-			// jeśli nie to szukaj większej rozmienialnej i rozmień
-			
-			System.out.println("Poszukiwanie rozmienialnej monety większej lub równej nierozmienialnej");
+			// jesli nie to szukaj wiekszej rozmienialnej i rozmien
 			
 			Pieniadz prawieOstatecznyRatunek = szukajNominaluWiekszegoLubRownego(nierozmienialnaMoneta.wartosc(), kasa, true);
 			if (prawieOstatecznyRatunek != null) {
@@ -109,9 +94,7 @@ class Kasjer implements KasjerInterface {
 				return reszta;
 				
 			} else {
-				// jeśli nie to szukaj w kasie dowolnych monet sumarycznie dających pozostałą kwotę
-				
-				System.out.println("Ostateczność - wydawanie nierozmienialnych monet");
+				// jesli nie to szukaj w kasie dowolnych monet sumarycznie dajacych pozostala kwote
 				
 				List<Pieniadz> ostatniaNadzieja = zbierzPieniadze(resztaNierozmienialnej, kasa, false);
 				
@@ -123,7 +106,7 @@ class Kasjer implements KasjerInterface {
 					return reszta;
 				}
 				
-				return null;
+				return null; // wszystko wybuchlo i wszyscy umarli
 			}
 		}
 	}
@@ -181,8 +164,7 @@ class Kasjer implements KasjerInterface {
 	}
 	
 	public void sortujPieniadzeMalejaco (List<Pieniadz> pieniadze) {
-		// rozmienialne pieniadze sa uznawane za wieksze ze wzgledu na priorytet
-		// Collections.sort(pieniadze, (a, b) -> a.wartosc() < b.wartosc() ? 1 : a.wartosc() == b.wartosc() ? a.czyMozeBycRozmieniony() == false ? -1 : 1 : -1);
+		// nierozmienialne pieniadze sa uznawane za wieksze ze wzgledu na priorytet
 		Collections.sort(pieniadze, (a, b) -> a.czyMozeBycRozmieniony() == false ? -1 : a.wartosc() < b.wartosc() ? 1 : a.wartosc() == b.wartosc() ? 0 : 1);
 	}
 	
