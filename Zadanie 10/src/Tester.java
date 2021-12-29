@@ -78,6 +78,12 @@ class Rozmieniacz implements RozmieniaczInterface {
     if (serialNumbers.contains(coin.numerSeryjny()))
       throw new RuntimeException("Serial number " + coin.numerSeryjny() + " appeared twice - money was duped");
 
+    if (coin.wartosc() == 1)
+      throw new RuntimeException("Spróbowano rozmienić pieniądz ZŁ1");
+
+    if (!coin.czyMozeBycRozmieniony())
+      throw new RuntimeException("Spróbowano rozmienić pieniądz nierozmienialny");
+
     List<Pieniadz> result = new LinkedList<Pieniadz>();
 
     int bound = nominaly.indexOf(coin.wartosc());
@@ -113,7 +119,6 @@ public class Tester {
         new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE));
     var reszta = k.rozlicz(69, pieniadze);
     var kasa = k.stanKasy();
-    
     r.serialNumberCheck2(kasa, reszta);
     if (reszta.stream().mapToInt(Pieniadz::wartosc).sum() != 1)
       throw new RuntimeException("Nieprawidlowa reszta");
@@ -202,6 +207,47 @@ public class Tester {
     if (!reszta.containsAll(List.of(new Pieniadz(Nominal.Zł10, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł2, Rozmienialnosc.NIE))))
       throw new RuntimeException("W reszcie nie ma oczekiwanych monet NR");
     if (kasa.stream().mapToInt(Pieniadz::wartosc).sum() != 30)
+      throw new RuntimeException("Nieprawidlowa kasa");
+    r.serialNumberCheck2(kasa, reszta);
+
+    // test 7: w kasie sa 3złR i 5złNR, trzeba wydać 5zł
+    k = new Kasjer();
+    k.dostępDoRozmieniacza(r);
+    k.dostępDoPoczątkowegoStanuKasy(
+        new Sup(new Pieniadz[] { new Pieniadz(Nominal.Zł1, Rozmienialnosc.TAK), new Pieniadz(Nominal.Zł2, Rozmienialnosc.TAK), new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE) }));
+    reszta = k.rozlicz(5, List.of(new Pieniadz(Nominal.Zł10, Rozmienialnosc.NIE)));
+    kasa = k.stanKasy();
+    if (reszta.stream().mapToInt(Pieniadz::wartosc).sum() != 10 + 5)
+      throw new RuntimeException("Nieprawidlowa suma reszty");
+    if (!reszta.containsAll(List.of(new Pieniadz(Nominal.Zł10, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE))))
+      throw new RuntimeException("W reszcie nie ma oczekiwanych monet NR");
+    if (kasa.stream().mapToInt(Pieniadz::wartosc).sum() != 3)
+      throw new RuntimeException("Nieprawidlowa kasa");
+    r.serialNumberCheck2(kasa, reszta);
+
+    // test 8: test na zepsucie zachłannego wydawania NR od największych
+    k = new Kasjer();
+    k.dostępDoRozmieniacza(r);
+    k.dostępDoPoczątkowegoStanuKasy(new Sup(new Pieniadz[] { new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE),
+        new Pieniadz(Nominal.Zł2, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł2, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł2, Rozmienialnosc.NIE) }));
+    reszta = k.rozlicz(9, List.of(new Pieniadz(Nominal.Zł20, Rozmienialnosc.NIE)));
+    kasa = k.stanKasy();
+    if (reszta.stream().mapToInt(Pieniadz::wartosc).sum() != 20 + 11)
+      throw new RuntimeException("Nieprawidlowa suma reszty");
+    if (kasa.stream().mapToInt(Pieniadz::wartosc).sum() != 5)
+      throw new RuntimeException("Nieprawidlowa kasa");
+    r.serialNumberCheck2(kasa, reszta);
+
+    // test 9: test na zepsucie zachłannego wydawania NR od najmniejszych
+    k = new Kasjer();
+    k.dostępDoRozmieniacza(r);
+    k.dostępDoPoczątkowegoStanuKasy(new Sup(new Pieniadz[] { new Pieniadz(Nominal.Zł1, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE),
+        new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł2, Rozmienialnosc.NIE) }));
+    reszta = k.rozlicz(9, List.of(new Pieniadz(Nominal.Zł20, Rozmienialnosc.NIE)));
+    kasa = k.stanKasy();
+    if (reszta.stream().mapToInt(Pieniadz::wartosc).sum() != 20 + 11)
+      throw new RuntimeException("Nieprawidlowa suma reszty");
+    if (kasa.stream().mapToInt(Pieniadz::wartosc).sum() != 2)
       throw new RuntimeException("Nieprawidlowa kasa");
     r.serialNumberCheck2(kasa, reszta);
 
