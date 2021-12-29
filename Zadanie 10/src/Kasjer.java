@@ -104,9 +104,25 @@ class Kasjer implements KasjerInterface {
 					odejmijPieniadze(kasa, ostatniaNadzieja);
 					
 					return reszta;
+				} else {
+					
+					// z jakiegos blizej niewyjasnionego powodu jesli odpale zbierzPieniadze() dwa razy
+					// to pomaga w przypadku kiedy zwykle zachlanne szukanie zawodzi
+					// i tak tu mialem null zwrocic wiec nic nie trace
+					
+					ostatniaNadzieja = zbierzPieniadze(resztaNierozmienialnej, kasa, false);
+					
+					if (policzPieniadze(ostatniaNadzieja) == resztaNierozmienialnej) {
+						
+						reszta.addAll(ostatniaNadzieja);
+						odejmijPieniadze(kasa, ostatniaNadzieja);
+						
+						return reszta;
+					} else {
+						
+						return null; // wszystko wybuchlo i wszyscy umarli
+					}
 				}
-				
-				return null; // wszystko wybuchlo i wszyscy umarli
 			}
 		}
 	}
