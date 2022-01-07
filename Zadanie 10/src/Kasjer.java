@@ -96,6 +96,8 @@ class Kasjer implements KasjerInterface {
 			} else {
 				// jesli nie to szukaj w kasie dowolnych monet sumarycznie dajacych pozostala kwote
 				
+				// w tym momencie juz nie wiem co sie w tym programie dzieje, ale jakos dziala
+				
 				List<Pieniadz> ostatniaNadzieja = zbierzPieniadze(resztaNierozmienialnej, kasa, false);
 				
 				if (policzPieniadze(ostatniaNadzieja) == resztaNierozmienialnej) {
@@ -120,7 +122,17 @@ class Kasjer implements KasjerInterface {
 						return reszta;
 					} else {
 						
-						return null; // wszystko wybuchlo i wszyscy umarli
+						// rozmien nierozmienialna klienta i wydaj reszte z kasy
+						
+						while (policzPieniadze (zbierzPieniadze(nierozmienialnaMoneta.wartosc() - cena, kasa, true)) != nierozmienialnaMoneta.wartosc() - cena) {
+							// rozmieniaj az bedzie sie dalo zebrac brakujaca kwote
+							rozmienNajmniejszyNominal(kasa);
+						}
+						
+						reszta.addAll(zbierzPieniadze(nierozmienialnaMoneta.wartosc() - cena, kasa, true));
+						odejmijPieniadze (kasa, reszta);
+						
+						return reszta;
 					}
 				}
 			}

@@ -112,13 +112,24 @@ public class Tester {
     var r = new Rozmieniacz();
     var k = new Kasjer();
     k.dostępDoRozmieniacza(r);
-
+    k.dostępDoPoczątkowegoStanuKasy(new Sup(new Pieniadz[] { new Pieniadz(Nominal.Zł2, Rozmienialnosc.TAK) }));
+    // test 0: 10NR kasa 2R | cena 9
+    List<Pieniadz> pieniadze = List.of(new Pieniadz(Nominal.Zł10, Rozmienialnosc.NIE));
+    var reszta = k.rozlicz(9, pieniadze);
+    var kasa = k.stanKasy();
+    r.serialNumberCheck2(kasa, reszta);
+    if (reszta.stream().mapToInt(Pieniadz::wartosc).sum() != 11)
+      throw new RuntimeException("Nieprawidlowa reszta");
+    if (kasa.stream().mapToInt(Pieniadz::wartosc).sum() != 1)
+      throw new RuntimeException("Nieprawidlowa kasa");
     // test 1: 35R + 35NR | cena 69
-    List<Pieniadz> pieniadze = List.of(new Pieniadz(Nominal.Zł10, Rozmienialnosc.TAK), new Pieniadz(Nominal.Zł20, Rozmienialnosc.TAK),
+    k = new Kasjer();
+    k.dostępDoRozmieniacza(r);
+    pieniadze = List.of(new Pieniadz(Nominal.Zł10, Rozmienialnosc.TAK), new Pieniadz(Nominal.Zł20, Rozmienialnosc.TAK),
         new Pieniadz(Nominal.Zł5, Rozmienialnosc.TAK), new Pieniadz(Nominal.Zł10, Rozmienialnosc.NIE), new Pieniadz(Nominal.Zł20, Rozmienialnosc.NIE),
         new Pieniadz(Nominal.Zł5, Rozmienialnosc.NIE));
-    var reszta = k.rozlicz(69, pieniadze);
-    var kasa = k.stanKasy();
+    reszta = k.rozlicz(69, pieniadze);
+    kasa = k.stanKasy();
     r.serialNumberCheck2(kasa, reszta);
     if (reszta.stream().mapToInt(Pieniadz::wartosc).sum() != 1)
       throw new RuntimeException("Nieprawidlowa reszta");
