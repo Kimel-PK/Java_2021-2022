@@ -1,14 +1,25 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
-public interface PrzechowywaczI {
-
+class PrzechowywaczObiektow implements PrzechowywaczI {
+	
+	Connection con;
+	
 	/**
 	 * Metoda ustawia połączenie do bazy danych typu SQLite.
 	 * 
 	 * @param connection referencja do utworzonego połączenia do bazy danych.
 	 */
-	public void setConnection(Connection connection);
+	public void setConnection(Connection connection) {
+		con = connection;
+	}
 
 	/**
 	 * Zleca pisanie obiektu na dysku w podanym katalogu.
@@ -23,7 +34,25 @@ public interface PrzechowywaczI {
 	 *                                  bazie) lub problem z przekazaną referencją
 	 *                                  obiektDoZapisu.
 	 */
-	public int save(int path, Object obiektDoZapisu) throws IllegalArgumentException;
+	public int save(int path, Object obiektDoZapisu) throws IllegalArgumentException {
+		
+		// dodaj wpis do bazy
+		
+		Statement zapytanie;
+		
+		try {
+			zapytanie = con.createStatement();
+			zapytanie.executeQuery("");
+		} catch (SQLException e) {}
+		
+		
+		// zapisz plik na dysku
+		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("objects.bin"))) {
+			outputStream.writeObject(obiektDoZapisu);
+		} catch (IOException e) {}
+		
+		return 0;
+	}
 
 	/**
 	 * Zleca odczyt obiektu o podanym id.
@@ -34,5 +63,18 @@ public interface PrzechowywaczI {
 	 *         obiektDoOdczytu metoda zwraca pusty obiekt Optional. Metoda
 	 *         <b>nigdy</b> nie zwraca null.
 	 */
-	public Optional<Object> read(int obiektDoOdczytu);
+	public Optional<Object> read(int obiektDoOdczytu) {
+		
+		// odczytaj wpis z bazy
+		
+		
+		// odczytaj plik z dysku
+		Optional<Object> obiekt = null;
+		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("objects.bin"))) {
+			obiekt = Optional.of((Object) inputStream.readObject());
+		} catch (IOException e) {} catch (ClassNotFoundException e) {}
+		
+		return obiekt;
+	}
+	
 }
