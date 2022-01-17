@@ -42,10 +42,10 @@
 
 ---
 
-## [Zadanie 11 - Nieznane]
+## [Zadanie 11 - Łamanie hasła](Zadanie%2011/)
 
 ---
 
-## [Zadanie 12 - Nieznane]
+## [Zadanie 12 - Baza danych](Zadanie%2012/)
 
 ---
