@@ -7,7 +7,7 @@
         "options": {    
           "cwd": "${workspaceFolder}\\bin"
         },
-        "command": "rm *; javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
+        "command": "rm *.class; javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
         "group": {
           "kind": "build",
           "isDefault": true
