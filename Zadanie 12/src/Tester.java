@@ -38,7 +38,7 @@ public class Tester {
         for(int i = 0; i < 6; i++){
 			
             Cos cos = new Cos(i);
-            // p.save(i % 2 + 1, cos);
+            p.save(i % 2 + 1, cos);
         }
 		
         for(int i = 1; i < 7; i++){
