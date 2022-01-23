@@ -32,11 +32,11 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 			ResultSet wynik = zapytanie.executeQuery("SELECT katalog FROM Katalogi WHERE idKatalogu = " + path);
             wynik.next();
 			
-            String sciezka = "." + wynik.getString("katalog") + "/";
+            String sciezka = wynik.getString("katalog") + "/";
             
 			// zapisz plik na dysku
             
-            File plik = new File(sciezka + "/" + nazwaPliku);
+            File plik = new File(sciezka + nazwaPliku);
             System.out.println(plik.getAbsolutePath());
             plik.createNewFile();
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(plik));
@@ -84,7 +84,7 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 			
 			// odczytaj plik z dysku
 			Optional<Object> obiekt = null;
-			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("." + sciezka + "/" + nazwaPliku));
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(sciezka + "/" + nazwaPliku));
 			obiekt = Optional.of((Object) inputStream.readObject());
 			
 			inputStream.close();
@@ -98,8 +98,6 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 	 		e.printStackTrace();
 	 	}
 		
-		 return null;
-		 
+		return null;
 	}
-	
 }
