@@ -36,10 +36,10 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
             
 			// odczytaj wolne ID
 			
-			wynik = zapytanie.executeQuery("SELECT idPliku FROM Pliki ORDER BY idPliku DESC LIMIT 1");
+			wynik = zapytanie.executeQuery("SELECT count(*)+1 AS idPliku FROM Pliki");	
             wynik.next();
 			
-            int idPliku = wynik.getInt("idPliku") + 1;
+            int idPliku = wynik.getInt("idPliku");
 			
 			// zapisz plik na dysku
             
