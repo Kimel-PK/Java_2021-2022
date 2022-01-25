@@ -34,6 +34,13 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 			
             String sciezka = wynik.getString("katalog") + "/";
             
+			// odczytaj wolne ID
+			
+			wynik = zapytanie.executeQuery("SELECT idPliku FROM Pliki ORDER BY idPliku DESC LIMIT 1");
+            wynik.next();
+			
+            int idPliku = wynik.getInt("idPliku") + 1;
+			
 			// zapisz plik na dysku
             
             File plik = new File(sciezka + nazwaPliku);
@@ -47,7 +54,7 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 			// dodaj wpis do bazy
 			
 			zapytanie = con.createStatement();
-			zapytanie.executeUpdate("INSERT INTO Pliki VALUES (null, " + path + ", '" + nazwaPliku + "')");
+			zapytanie.executeUpdate("INSERT INTO Pliki VALUES (" + idPliku + ", " + path + ", '" + nazwaPliku + "')");
 			
 			wynik = zapytanie.getGeneratedKeys();
             wynik.next();
