@@ -15,9 +15,6 @@ class Start {
 	Plotno rysunek;
 	
 	Graf graf = new Graf();
-	List<Wezel> wezly = new LinkedList<> ();
-	List<Krawedz> krawedzie = new LinkedList<> ();
-	Map<Integer, Float> wagi = new HashMap<> ();
 	
 	public static void main( String[] argv ) {
 		Start paint = new Start();
@@ -29,7 +26,7 @@ class Start {
 		paint.przyciskZaladuj = new JButton ("Load");
 		paint.przyciskZaladuj.addActionListener (paint.new ZaladujDane ());
 		
-		paint.rysunek = new Plotno(paint.graf, paint.wezly, paint.krawedzie, paint.wagi);
+		paint.rysunek = new Plotno(paint.graf);
 		
 		paint.ramka.getContentPane ().add (BorderLayout.NORTH, paint.przyciskZaladuj);
 		paint.ramka.getContentPane ().add (BorderLayout.CENTER, paint.rysunek);
@@ -56,9 +53,12 @@ class Start {
 	
 	void PobierzDane(String plikDanych) {
 		
-		wezly.clear();
-		krawedzie.clear();
-		wagi.clear();
+		int lewa = 0;
+		int prawa = 0;
+		int gora = 0;
+		int dol = 0;
+		
+		graf.wyczysc();
 		
 		Scanner sc = null;
 		
@@ -78,26 +78,26 @@ class Start {
 			y = sc.nextInt();
 			
 			if (i == 0) {
-				graf.lewa = x;
-				graf.prawa = x;
-				graf.gora = y;
-				graf.dol = y;
+				lewa = x;
+				prawa = x;
+				gora = y;
+				dol = y;
 			}
 			
 			// okresl bounding box
-			if (x < graf.lewa) {
-				graf.lewa = x;
-			} else if (x > graf.prawa) {
-				graf.prawa = x;
+			if (x < lewa) {
+				lewa = x;
+			} else if (x > prawa) {
+				prawa = x;
 			}
 			
-			if (y < graf.dol) {
-				graf.dol = y;
-			} else if (y > graf.gora) {
-				graf.gora = y;
+			if (y < dol) {
+				dol = y;
+			} else if (y > gora) {
+				gora = y;
 			}
 			
-			wezly.add(new Wezel(x, y));
+			graf.wezly.add(new Punkt(x, y));
 		}
 		
 		// odczytaj krawedzie
@@ -108,49 +108,25 @@ class Start {
 			y = sc.nextInt();
 			waga = sc.nextInt();
 			
-			krawedzie.add(new Krawedz(wezly.get(x - 1), wezly.get(y - 1), waga));
+			graf.krawedzie.add(new Krawedz(graf.wezly.get(x - 1), graf.wezly.get(y - 1), waga));
 		}
 		
-		for (Wezel wezel : wezly) {
-			wezel.x -= graf.lewa;
-			wezel.y -= graf.dol;
-		}
-		
-		graf.prawa -= graf.lewa;
-		graf.gora -= graf.dol;
-		graf.lewa = 0;
-		graf.dol = 0;
-		
-		graf.prawa--;
-		
-		// symetria punktow
-		for (Wezel wezel : wezly) {
-			wezel.y -= (int)(2.0 * ((double)wezel.y - (double)(graf.gora - graf.dol) / 2.0));
-		}
-		
-		graf.gora--;
-		
-		/*
-		System.out.println("Bounding Box:");
-		System.out.println("G: " + graf.gora);
-		System.out.println("P: " + graf.prawa);
-		System.out.println("D: " + graf.dol);
-		System.out.println("L: " + graf.lewa);
-		System.out.println("Proporcje: " + graf.proporcje());
-		*/
+		graf.srodek = new Punkt ((prawa - lewa) / 2.0 + lewa, (gora - dol) / 2.0 + dol);
+		graf.szerokosc = prawa - lewa;
+		graf.wysokosc = gora - dol;
 		
 		sc.close();
 		
 		// okresl znormalizowane wagi
 		int wagaMax = 0;
 		
-		for (Krawedz krawedz : krawedzie) {
+		for (Krawedz krawedz : graf.krawedzie) {
 			if (krawedz.waga > wagaMax)
 				wagaMax = krawedz.waga;
 		}
 		
-		for (Krawedz krawedz : krawedzie) {
-			wagi.put(krawedz.waga, (float)(krawedz.waga / (double)wagaMax * 10));
+		for (Krawedz krawedz : graf.krawedzie) {
+			graf.wagi.put(krawedz.waga, (float)(krawedz.waga / (double)wagaMax * 10));
 		}
 		
 	}
@@ -160,15 +136,13 @@ class Start {
 class Plotno extends JPanel {
 	
 	Graf graf;
-	List<Wezel> wezly;
-	List<Krawedz> krawedzie;
-	Map<Integer, Float> wagi;
 	
-	public Plotno (Graf _graf, List<Wezel> _wezly, List<Krawedz> _krawedzie, Map<Integer, Float> _wagi) {
+	public Plotno (Graf _graf) {
 		graf = _graf;
-		wezly = _wezly;
-		krawedzie = _krawedzie;
-		wagi = _wagi;
+	}
+	
+	Punkt ObliczPozycjeWOknie (Punkt p1, double sX, double sY, double wspolczynnik) {
+		return new Punkt ((int)((p1.x - sX) * wspolczynnik + getWidth() / 2.0), (int)((p1.y - sY) * (-wspolczynnik) + getHeight() / 2.0));
 	}
 	
 	public void paintComponent (Graphics g) {
@@ -176,10 +150,7 @@ class Plotno extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		
 		g2.setColor (Color.black);
-		double wspolczynnikX = 1;
-		double wspolczynnikY = 1;
-		int margin_x = 0;
-		int margin_y = 0;
+		double wspolczynnik = 1;
 		
 		float gruboscWezla = 2;
 		int promienWezla = 20;
@@ -187,40 +158,33 @@ class Plotno extends JPanel {
 		double wspolczynnikKrawedz = 1;
 		
 		if (getWidth() / (double)getHeight() < graf.proporcje()) {
-			wspolczynnikX = getWidth() * 0.9 / (double)(graf.prawa + 1);
-			margin_x = (int)((double)getWidth() * 0.1 / 2.0);
-			
-			wspolczynnikY = (getWidth() / graf.proporcje()) * 0.9 / (double)(graf.gora + 1);
-			margin_y = (int)((double)(getHeight() - (getWidth() / graf.proporcje())) / 2.0) + (int)((double)getHeight() * 0.1 / 2.0);
-			
-			gruboscWezla = (float)(getWidth() * 0.005);
-			promienWezla = (int)(getWidth() * 0.05);
-			
-			wspolczynnikKrawedz = (double)(getWidth() * 0.002);
+			wspolczynnik = getWidth() / (double)graf.szerokosc;
 		} else {
-			wspolczynnikX = (getHeight() * graf.proporcje()) * 0.9 / (double)(graf.prawa + 1);
-			margin_x = (int)((double)(getWidth() - (getHeight() * graf.proporcje())) / 2.0) + (int)((double)getWidth() * 0.1 / 2.0);
-			
-			wspolczynnikY = getHeight() * 0.9 / (double)(graf.gora + 1);
-			margin_y = (int)((double)getHeight() * 0.1 / 2.0);
-			
-			gruboscWezla = (float)(getHeight() * 0.005);
-			promienWezla = (int)(getHeight() * 0.05);
-			
-			wspolczynnikKrawedz = (double)(getHeight() * 0.002);
+			wspolczynnik = getHeight() / (double)graf.wysokosc;
 		}
 		
-		for (Wezel wezel : wezly) {
+		wspolczynnik *= 0.9;
+		
+		gruboscWezla = (float)(wspolczynnik * 0.03);
+		promienWezla = (int)(wspolczynnik * 0.3);
+		
+		wspolczynnikKrawedz = wspolczynnik * 0.01;
+		
+		for (Punkt wezel : graf.wezly) {
+			
+			Punkt punkt = ObliczPozycjeWOknie (wezel, graf.srodek.x, graf.srodek.y, wspolczynnik);
+			
 			g2.setStroke(new BasicStroke (gruboscWezla));
-			g2.drawOval ((int)(wspolczynnikX * wezel.x) + margin_x - promienWezla / 2, (int)(wspolczynnikY * wezel.y) + margin_y - promienWezla / 2, promienWezla, promienWezla);
+			g2.drawOval ((int)(punkt.x - promienWezla / 2.0), (int)(punkt.y - promienWezla / 2.0), promienWezla, promienWezla);
 		}
-		for (Krawedz krawedz : krawedzie) {
-			int p1_x = (int)(wspolczynnikX * krawedz.wezelPocz.x) + margin_x;
-			int p1_y = (int)(wspolczynnikY * krawedz.wezelPocz.y) + margin_y;
-			int p2_x = (int)(wspolczynnikX * krawedz.wezelKon.x) + margin_x;
-			int p2_y = (int)(wspolczynnikY * krawedz.wezelKon.y) + margin_y;
-			g2.setStroke(new BasicStroke (wagi.get (krawedz.waga) * (float)wspolczynnikKrawedz));
-			g2.drawLine(p1_x, p1_y, p2_x, p2_y);
+		
+		for (Krawedz krawedz : graf.krawedzie) {
+			
+			Punkt poczatek = ObliczPozycjeWOknie (krawedz.wezelPocz, graf.srodek.x, graf.srodek.y, wspolczynnik);
+			Punkt koniec = ObliczPozycjeWOknie (krawedz.wezelKon, graf.srodek.x, graf.srodek.y, wspolczynnik);
+			
+			g2.setStroke(new BasicStroke (graf.wagi.get (krawedz.waga) * (float)wspolczynnikKrawedz));
+			g2.drawLine((int)poczatek.x, (int)poczatek.y, (int)koniec.x, (int)koniec.y);
 		}
 		
 	}
@@ -228,35 +192,46 @@ class Plotno extends JPanel {
 }
 
 class Graf {
+	int szerokosc;
+	int wysokosc;
+	Punkt srodek;
 	
-	int lewa;
-	int prawa;
-	int gora;
-	int dol;
-	public double proporcje () {
-		return (double)(prawa - lewa) / (double)(gora - dol);
+	List<Punkt> wezly = new LinkedList<> ();
+	List<Krawedz> krawedzie = new LinkedList<> ();
+	Map<Integer, Float> wagi = new HashMap<> ();
+	
+	double proporcje () {
+		return szerokosc / (double)wysokosc;
 	}
 	
-}
-
-class Wezel {
-	public int x;
-	public int y;
-	
-	public Wezel (int _x, int _y) {
-		x = _x;
-		y = _y;
+	void wyczysc () {
+		szerokosc = 0;
+		wysokosc = 0;
+		srodek = null;
+		wezly.clear();
+		krawedzie.clear();
+		wagi.clear();
 	}
 }
 
 class Krawedz {
-	Wezel wezelPocz;
-	Wezel wezelKon;
+	Punkt wezelPocz;
+	Punkt wezelKon;
 	int waga;
 	
-	public Krawedz (Wezel _wezelPocz, Wezel _wezelKon, int _waga) {
+	public Krawedz (Punkt _wezelPocz, Punkt _wezelKon, int _waga) {
 		wezelPocz = _wezelPocz;
 		wezelKon = _wezelKon;
 		waga = _waga;
+	}
+}
+
+class Punkt {
+	public double x;
+	public double y;
+	
+	public Punkt (double _x, double _y) {
+		x = _x;
+		y = _y;
 	}
 }
