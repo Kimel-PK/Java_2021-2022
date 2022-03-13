@@ -1,17 +1,17 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "BusLine.class",
-        "type": "shell",
-		"options": {    
-			"cwd": "${workspaceFolder}\\bin"
-		},
-        "command": "javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
-      }
-    ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "BusLine.class",
+			"type": "shell",
+			"options": {		
+				"cwd": "${workspaceFolder}\\bin"
+			},
+			"command": "javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
 }

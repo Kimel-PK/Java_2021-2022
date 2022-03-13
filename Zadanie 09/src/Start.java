@@ -37,7 +37,7 @@ class Start {
 	
 	class ZaladujDane implements ActionListener {
 		public void actionPerformed (ActionEvent e) {
-	        
+			
 			JFileChooser jfc = new JFileChooser();
 			jfc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 			

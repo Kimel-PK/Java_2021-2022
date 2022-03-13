@@ -1,17 +1,17 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "Przetestuj program",
-        "type": "shell",
-        "options": {    
-          "cwd": "${workspaceFolder}\\bin"
-        },
-        "command": "rm *.class; javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
-      }
-    ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Przetestuj program",
+			"type": "shell",
+			"options": {		
+				"cwd": "${workspaceFolder}\\bin"
+			},
+			"command": "rm *.class; javac -encoding utf8 ../src/*.java; mv -Force ../src/*.class ./; java Tester",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
 }

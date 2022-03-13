@@ -30,22 +30,22 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 			
 			Statement zapytanie = con.createStatement();
 			ResultSet wynik = zapytanie.executeQuery("SELECT katalog FROM Katalogi WHERE idKatalogu = " + path);
-            wynik.next();
+			wynik.next();
 			
-            String sciezka = wynik.getString("katalog") + "/";
-            
+			String sciezka = wynik.getString("katalog") + "/";
+			
 			// odczytaj wolne ID
 			
 			wynik = zapytanie.executeQuery("SELECT count(*)+1 AS idPliku FROM Pliki");	
-            wynik.next();
+			wynik.next();
 			
-            int idPliku = wynik.getInt("idPliku");
+			int idPliku = wynik.getInt("idPliku");
 			
 			// zapisz plik na dysku
-            
-            File plik = new File(sciezka + nazwaPliku);
-            System.out.println(plik.getAbsolutePath());
-            plik.createNewFile();
+			
+			File plik = new File(sciezka + nazwaPliku);
+			System.out.println(plik.getAbsolutePath());
+			plik.createNewFile();
 			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(plik));
 			outputStream.writeObject(obiektDoZapisu);
 			
@@ -57,7 +57,7 @@ class PrzechowywaczObiektow implements PrzechowywaczI {
 			zapytanie.executeUpdate("INSERT INTO Pliki VALUES (" + idPliku + ", " + path + ", '" + nazwaPliku + "')");
 			
 			wynik = zapytanie.getGeneratedKeys();
-            wynik.next();
+			wynik.next();
 			
 			int id = wynik.getInt(1);
 			System.out.println(id);

@@ -12,6 +12,6 @@ public class Tester {
 		System.out.println("odwrocony szyfr:");
 		System.out.println (decrypter.getDecode());
 		
-    }
+	}
 	
 }

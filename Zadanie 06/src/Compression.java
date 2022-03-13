@@ -38,8 +38,8 @@ class Compression implements CompressionInterface{
 		
 		// posortuj mape liczby slow
 		Map<String, Integer> liczbaSlowMalejaco = liczbaSlow.entrySet().stream()
-        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+		.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+		.collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 		
 		int optymalny = dlugoscWejscia;
 		int skompresowany;
